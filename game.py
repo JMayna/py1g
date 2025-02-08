@@ -14,12 +14,20 @@ def character_Creation():
         classchoice = input("Which class do you choose?\n [1] Fighter\n [2] Mage \n [3] Thief \n")
         if classchoice == "1":
             playerclass = "Fighter"
+            HP = 20
+            AC = 18
             break  
         elif classchoice == "2":
             playerclass = "Mage"
+            HP = 20
+            AC = 18
+            Mana = 20
             break
         elif classchoice == "3":
             playerclass = "Thief"
+            HP = 20
+            AC = 18
+            Stealth = 20
             break
         else:
             print("Invalid choice: Please choose 1, 2, or 3")
