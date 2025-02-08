@@ -1,52 +1,46 @@
 import random
 
-
-
 def new_Game():
-      character_Creation()
- 
+     playername, playerclass = character_Creation()
+     if playerclass:
+         print(f"Welcome {playername}, you have chosen to play as a {playerclass}")
+
 def character_Creation():
+   
     playername = input("What is your name? ")
-    print("Welcome " + playername + ",")
-    
+    print(f"Welcome {playername}!") 
+
     while True:
-        classchoice = input("Which class do you choose\n [1] Fighter\n [2] Mage \n [3] Thief \n")
+        classchoice = input("Which class do you choose?\n [1] Fighter\n [2] Mage \n [3] Thief \n")
         if classchoice == "1":
-            print("You have chosen a Fighter")
-            playerclass= "Fighter"
+            playerclass = "Fighter"
+            break  
+        elif classchoice == "2":
+            playerclass = "Mage"
             break
-            
-        elif  classchoice == "2":
-            print("You have chosen a Mage")
-            playerclass= "Mage"
-            break
-        
         elif classchoice == "3":
-            print("You have chosen a Thief")
-            playerclass= "Thief"
+            playerclass = "Thief"
             break
-        
         else:
-            print ("Invalid choice: Plase choose 1, 2, or 3")
-     
- 
- 
-    
+            print("Invalid choice: Please choose 1, 2, or 3")
+    return  playername, playerclass
+
+    print(f"Welcome {playername}, you have chosen to play as a {playerclass}")  
+
+
 def quit_Game():
     print("Exiting game!")
     exit()
 
-
-#Menu Choices
+# Main Menu
 while True:
-    menuChoice = input("Please choose and option \n [1] New Game\n [2] Exit Game\n")
+    menuChoice = input("Please choose an option \n [1] New Game\n [2] Exit Game\n")
 
     if menuChoice == "1":
         new_Game()
-        break
-
+        break  
     elif menuChoice == "2":
-        quit_Game
-        break
-    else: print("Invalid choice: Please Choose 1 or 2")
-    
+        quit_Game()  
+        break  
+    else:
+        print("Invalid choice: Please choose 1 or 2")
