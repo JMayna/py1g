@@ -1,4 +1,6 @@
 import random
+import pickle
+
 
 
 
@@ -104,8 +106,8 @@ def game_menu (playername, playerclass, HP, AC, Mana, Stealth, player_level, exp
             view_stats(playername, playerclass,HP,AC,Mana, Stealth, player_level, exp)
             
         elif playerChoice == "3":
-            save_game()
-            break
+            save_game(playername, playerclass, HP, AC, Mana, Stealth, player_level, exp)
+            
         elif playerChoice == "4":
             return_to_main_menu()
             break
@@ -157,6 +159,7 @@ def next_encounter(playername, playerclass, player_level, HP, AC, Mana, Stealth,
                 game_menu(playername, playerclass, HP, AC, Mana, Stealth, player_level, exp)
         else:
             print("Attack misses!")
+        input("Press space to continue...")  # Pause here, wait for spacebar
 
         # Monster's turn (if still alive)
         if monster["hp"] > 0:
@@ -181,6 +184,7 @@ def next_encounter(playername, playerclass, player_level, HP, AC, Mana, Stealth,
                     
             else:
                 print("Monster attack misses!")
+        input("Press space to continue...")  # Pause here, wait for spacebar
         if HP <= 0:
             game_menu()
     
@@ -204,8 +208,41 @@ def view_stats(playername, playerclass, HP, AC, Mana, Stealth, player_level, exp
     else:
         print() #newline
 
-def save_game():
-    pass
+def save_game(playername, playerclass, HP, AC, Mana, Stealth, player_level, exp):
+     game_data = {  # Create a dictionary to store game data
+        "playername": playername,
+        "playerclass": playerclass,
+        "HP": HP,
+        "AC": AC,
+        "Mana": Mana,
+        "Stealth": Stealth,
+        "player_level": player_level,
+        "exp": exp
+    }
+     
+     try:
+         with open("save_game.pkl", "wb") as file:
+             pickle.dump(game_data, file)
+         print("Game Saved Sucessfully")
+     except Exception as e:
+         print(f"Erorr saving game {e}")
+     
+def load_game():
+    try:
+        with open("save_game.pkl", "rb") as file:  # Open file in binary read mode
+            game_data = pickle.load(file)  # Load game data
+        print("Game loaded successfully!")
+        return game_data  # Return the loaded game data
+    except FileNotFoundError:
+        print("No saved game found.")
+        return None  # Return None if no save file exists
+    except Exception as e:
+        print(f"Error loading game: {e}")
+        return None
+     
+     
+     
+     
 
 def return_to_main_menu():
     main_menu()
@@ -219,15 +256,33 @@ def quit_Game():
 
 def main_menu():
     while True:
-        menuChoice = input("Please choose an option \n [1] New Game\n [2] Exit Game\n")
+        menuChoice = input("Please choose an option \n [1] New Game\n [2] Load Game\n [3] Exit Game\n")  # Added Load Game option
 
         if menuChoice == "1":
             new_Game()
-            break  
+            break
         elif menuChoice == "2":
-            quit_Game()  
-            break  
+            loaded_game = load_game()
+            if loaded_game:
+                playername = loaded_game["playername"]
+                playerclass = loaded_game["playerclass"]
+                HP = loaded_game["HP"]
+                AC = loaded_game["AC"]
+                Mana = loaded_game["Mana"]
+                Stealth = loaded_game["Stealth"]
+                player_level = loaded_game["player_level"]
+                exp = loaded_game["exp"]
+                print("Game loaded. Continuing from where you left off.")
+                game_menu(playername, playerclass, HP, AC, Mana, Stealth, player_level, exp)
+                break  # Exit main menu after loading
+            else:
+                print("No saved game found. Starting a new game.") #inform user that no save was found
+                new_Game()
+                break #exit loop after new game
+        elif menuChoice == "3":  # Changed to 3
+            quit_Game()
+            break
         else:
-            print("Invalid choice: Please choose 1 or 2")
+            print("Invalid choice: Please choose 1, 2, or 3")  # Updated message
 
 main_menu()
